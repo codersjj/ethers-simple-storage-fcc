@@ -1,29 +1,29 @@
-const ethers = require("ethers");
-const fs = require("fs");
-require("dotenv").config();
+const ethers = require("ethers")
+const fs = require("fs")
+require("dotenv").config()
 // console.log(process.env);
 
 async function main() {
   // compile them in code
   // compile them separately
 
-  const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+  const provider = new ethers.JsonRpcProvider(process.env.RPC_URL)
   // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-  const encryptedJSONKey = fs.readFileSync("./.encryptedKey.json", "utf8");
+  const encryptedJSONKey = fs.readFileSync("./.encryptedKey.json", "utf8")
   let wallet = ethers.Wallet.fromEncryptedJsonSync(
     encryptedJSONKey,
-    process.env.PRIVATE_KEY_PASSWORD
-  );
-  wallet = wallet.connect(provider);
+    process.env.PRIVATE_KEY_PASSWORD,
+  )
+  wallet = wallet.connect(provider)
 
-  const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8");
+  const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8")
   const binary = fs.readFileSync(
     "./SimpleStorage_sol_SimpleStorage.bin",
-    "utf8"
-  );
-  const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
-  console.log("Deploying, please wait...");
-  const contract = await contractFactory.deploy(); // await: STOP here! Wait for contract to deploy!
+    "utf8",
+  )
+  const contractFactory = new ethers.ContractFactory(abi, binary, wallet)
+  console.log("Deploying, please wait...")
+  const contract = await contractFactory.deploy() // await: STOP here! Wait for contract to deploy!
   // const contract = await contractFactory.deploy({
   //   gasPrice: 666666666666,
   // });
@@ -36,7 +36,7 @@ async function main() {
 
   const contractTransactionReceipt = await contract
     .deploymentTransaction()
-    .wait(1);
+    .wait(1)
 
   // console.log("Here is the transaction receipt, contractTransactionReceipt:");
   // console.log(contractTransactionReceipt);
@@ -66,17 +66,17 @@ async function main() {
   //#region interacting with contracts in ethers.js
 
   // Get number
-  const currentFavoriteNumber = await contract.retrieve();
-  console.log("currentFavoriteNumber:", currentFavoriteNumber);
+  const currentFavoriteNumber = await contract.retrieve()
+  console.log("currentFavoriteNumber:", currentFavoriteNumber)
   console.log(
-    `currentFavoriteNumber.toString: ${currentFavoriteNumber.toString()}`
-  );
+    `currentFavoriteNumber.toString: ${currentFavoriteNumber.toString()}`,
+  )
   // const transactionResponse = await contract.store(7);
-  const transactionResponse = await contract.store("7");
-  const transactionReceipt = await transactionResponse.wait(1);
+  const transactionResponse = await contract.store("7")
+  const transactionReceipt = await transactionResponse.wait(1)
   // console.log("transactionReceipt:", transactionReceipt);
-  const updatedFavoriteNumber = await contract.retrieve();
-  console.log(`updated favoriteNumber is: ${updatedFavoriteNumber}`);
+  const updatedFavoriteNumber = await contract.retrieve()
+  console.log(`updated favoriteNumber is: ${updatedFavoriteNumber}`)
 
   //#endregion interacting with contracts in ethers.js
 }
@@ -84,6 +84,6 @@ async function main() {
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+    console.error(error)
+    process.exit(1)
+  })
