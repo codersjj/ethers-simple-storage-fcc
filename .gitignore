@@ -1,0 +1,8 @@
+.env
+node_modules
+.encryptedKey.json
+
+SimpleStorage_sol_*
+.notes.md
+
+.yarn*
