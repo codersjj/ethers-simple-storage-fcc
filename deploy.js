@@ -1,6 +1,9 @@
-const ethers = require("ethers")
-const fs = require("fs")
-require("dotenv").config()
+// const ethers = require("ethers")
+// const fs = require("fs")
+// require("dotenv").config()
+import { ethers } from "ethers"
+import fs from "fs"
+import "dotenv/config"
 // console.log(process.env);
 
 async function main() {
