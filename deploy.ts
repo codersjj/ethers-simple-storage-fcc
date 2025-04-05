@@ -15,7 +15,7 @@ async function main() {
   const encryptedJSONKey = fs.readFileSync("./.encryptedKey.json", "utf8")
   let wallet = ethers.Wallet.fromEncryptedJsonSync(
     encryptedJSONKey,
-    process.env.PRIVATE_KEY_PASSWORD,
+    process.env.PRIVATE_KEY_PASSWORD!,
   )
   wallet = wallet.connect(provider)
 
@@ -39,9 +39,11 @@ async function main() {
   // );
   // console.log(contract.deploymentTransaction());
 
-  const contractTransactionReceipt = await contract
-    .deploymentTransaction()
-    .wait(1)
+  const deploymentTx = contract.deploymentTransaction()
+  if (!deploymentTx) {
+    throw new Error("Deployment transaction is null.")
+  }
+  const contractTransactionReceipt = await deploymentTx.wait(1)
   console.log("Contract Address (target):", contract.target)
   console.log("Contract Address:", await contract.getAddress())
 
@@ -73,16 +75,16 @@ async function main() {
   //#region interacting with contracts in ethers.js
 
   // Get number
-  const currentFavoriteNumber = await contract.retrieve()
+  const currentFavoriteNumber = await (contract as any).retrieve()
   console.log("currentFavoriteNumber:", currentFavoriteNumber)
   console.log(
     `currentFavoriteNumber.toString: ${currentFavoriteNumber.toString()}`,
   )
   // const transactionResponse = await contract.store(7);
-  const transactionResponse = await contract.store("7")
+  const transactionResponse = await (contract as any).store("7")
   const transactionReceipt = await transactionResponse.wait(1)
   // console.log("transactionReceipt:", transactionReceipt);
-  const updatedFavoriteNumber = await contract.retrieve()
+  const updatedFavoriteNumber = await (contract as any).retrieve()
   console.log(`updated favoriteNumber is: ${updatedFavoriteNumber}`)
 
   //#endregion interacting with contracts in ethers.js

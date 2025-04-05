@@ -4,13 +4,13 @@
     "ethers": "6.13.5",
     "solc": "0.8.7-fixed"
   },
-  "type": "module",
   "scripts": {
     "compile": "yarn solcjs --bin --abi --include-path node_modules/ --base-path . -o . SimpleStorage.sol"
   },
   "packageManager": "yarn@4.8.1",
   "devDependencies": {
     "prettier": "^3.5.3",
-    "prettier-plugin-solidity": "^1.4.2"
+    "prettier-plugin-solidity": "^1.4.2",
+    "tsx": "^4.19.3"
   }
 }
