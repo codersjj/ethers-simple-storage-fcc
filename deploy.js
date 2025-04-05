@@ -8,7 +8,7 @@ async function main() {
   // compile them separately
 
   const provider = new ethers.JsonRpcProvider(process.env.RPC_URL)
-  // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+  // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
   const encryptedJSONKey = fs.readFileSync("./.encryptedKey.json", "utf8")
   let wallet = ethers.Wallet.fromEncryptedJsonSync(
     encryptedJSONKey,
@@ -24,6 +24,8 @@ async function main() {
   const contractFactory = new ethers.ContractFactory(abi, binary, wallet)
   console.log("Deploying, please wait...")
   const contract = await contractFactory.deploy() // await: STOP here! Wait for contract to deploy!
+  console.log("Contract Address (target):", contract.target)
+  console.log("Contract Address:", await contract.getAddress())
   // const contract = await contractFactory.deploy({
   //   gasPrice: 666666666666,
   // });
@@ -37,6 +39,8 @@ async function main() {
   const contractTransactionReceipt = await contract
     .deploymentTransaction()
     .wait(1)
+  console.log("Contract Address (target):", contract.target)
+  console.log("Contract Address:", await contract.getAddress())
 
   // console.log("Here is the transaction receipt, contractTransactionReceipt:");
   // console.log(contractTransactionReceipt);
